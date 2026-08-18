@@ -1,0 +1,14 @@
+
+# Playwright
+node_modules/
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
+/playwright/.auth/
+
+# Secrets
+.env
+
+# Local Claude Code settings (machine-specific, not part of the template)
+.claude/settings.local.json
