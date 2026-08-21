@@ -1,197 +1,151 @@
 # Onboarding: Playwright + Claude Code (MCP) project opzetten
 
-Dit document beschrijft stap voor stap hoe je een testautomatiseringsproject opzet
-waarbij een AI-agent (Claude Code) de browser bestuurt via de **Playwright MCP
-server**, op basis van natuurlijke taal-instructies in plaats van hardcoded
-selectors/clicks.
+Dit document beschrijft hoe je dit template gebruikt — stap voor stap.
 
-Doel: een werkend scenario tegen je eigen Mendix-app opzetten
-("log in als admin, ga naar rapportenpagina, verifieer dat data geladen is"),
-zodat je zelf ervaart hoe agent-gestuurde testautomatisering werkt.
+Het project is al voorgeïnitialiseerd. Je hoeft NIET zelf `npm init playwright` te draaien;
+je installeert alleen de dependencies en voert het in.
+
+**Doel:** een werkend agent-scenario tegen jouw Mendix-app (log in, navigeer, verifieer data),
+zodat je zelf ervaart hoe AI-gestuurde testautomatisering werkt.
 
 ---
 
 ## 0. Wat is wat (kort)
 
-- **Playwright** — het automation framework dat de browser daadwerkelijk bestuurt
-  (klikken, typen, wachten, assert maken). Cross-browser: Chromium, Firefox, WebKit.
-- **Playwright MCP server** — een los pakket (`@playwright/mcp`) dat Playwright's
-  mogelijkheden beschikbaar maakt als _tools_ voor een AI-agent, via het
-  Model Context Protocol (MCP).
-- **Claude Code** — de AI-agent (deze tool) die, zodra hij verbonden is met de
-  Playwright MCP server, een instructie als "log in als admin en verifieer het
-  dashboard" kan omzetten in echte browseracties — live, zonder dat jij die
-  stappen van tevoren in code hebt vastgelegd.
-- **Traditionele Playwright test** — een gewoon `.spec.ts` bestand met vaste
-  stappen. Dit blijft je **plan B** voor het geval de live agent-demo faalt.
+- **Playwright** — automation framework dat de browser bestuurt (klikken, typen, wachten).
+- **Playwright MCP server** (`@playwright/mcp`) — maakt Playwright-tools beschikbaar voor een AI-agent.
+- **Claude Code** — AI-agent die, eenmaal gekoppeld via MCP, browseracties uitvoert op basis van jouw instructies in natuurlijke taal — geen hardcoded stappen.
+- **Plan B: vaste test** (`tests/dashboard.spec.ts`) — fallback voor als de live agent-demo stroeft.
 
 ---
 
-## 1. Vereisten (eenmalig, check dit als eerste)
+## 1. Vereisten (check dit eerst)
 
-- [ ] Node.js LTS geïnstalleerd (`node --version` — 18+ is prima)
+- [ ] Node.js 18+ (`node --version`)
 - [ ] npm werkt (`npm --version`)
-- [ ] VS Code met Claude Code (deze extensie) — al aanwezig
-- [ ] URL van de Mendix test/acceptatie-omgeving
-- [ ] Een testaccount (bijv. admin) met gebruikersnaam/wachtwoord voor die omgeving
-- [ ] Git (optioneel, maar handig om je opzet te kunnen terugdraaien)
+- [ ] VS Code met Claude Code extensie
+- [ ] URL van jouw Mendix-omgeving (bv. `http://localhost:8080`)
+- [ ] Testaccount (gebruikersnaam + wachtwoord) voor die omgeving
 
-> Geen wachtwoorden in chat, slides, of git plakken. Die gaan in een lokaal
-> `.env` bestand (zie stap 4) dat nooit wordt gecommit.
+> **Geen wachtwoorden in chat, slides of git.** Die gaan in `.env` (lokaal, nooit gecommit).
 
 ---
 
-## 2. Project initialiseren
-
-In de projectmap (`demo-testautomation-playwright`):
+## 2. Clone & installeer dependencies
 
 ```bash
-npm init playwright@latest
+git clone https://github.com/MoraadAnas/demo-testautomation-playwright.git
+cd demo-testautomation-playwright
+npm install
 ```
 
-Kies bij de prompts:
-
-- TypeScript: **ja**
-- Map voor tests: `tests` (default)
-- GitHub Actions workflow: mag je overslaan voor de demo, is niet nodig
-- Browsers installeren: **ja** (download Chromium/Firefox/WebKit)
-
-Dit genereert o.a. `playwright.config.ts`, een `tests/` map met een voorbeeldtest,
-en `package.json`.
-
-**Check dat het werkt:**
-
-```bash
-npx playwright test
-```
-
-Als de voorbeeldtest slaagt, is de basis goed.
+Dit installeert `@playwright/test`, `@playwright/mcp`, `dotenv`, etc.
 
 ---
 
-## 3. Playwright MCP server installeren
-
-Dit is het los pakket dat Playwright-tools beschikbaar maakt voor de agent:
+## 3. Download de Chromium browser
 
 ```bash
-npm install -D @playwright/mcp
+npx playwright install chromium
 ```
+
+Dit downloadt ~200 MB naar `~/.ms-playwright/` (je lokale machine, niet in git).
+
+**Controleer dat het werkt:**
+
+```bash
+npx playwright test smoke
+```
+
+Slaagt de test? Mooi — je setup is werkend.
 
 ---
 
-## 4. Environment variabelen voor de Mendix-app
+## 4. Configureer jouw Mendix-omgeving
 
-Maak een `.env` bestand (nooit committen) en een `.env.example` (wel committen,
-zonder echte waarden):
+Kopieer `.env.example` naar `.env` (deze wordt nooit gecommit):
 
-**`.env`** (echte waarden, lokaal):
+```bash
+cp .env.example .env
+```
+
+Open `.env` en vul in:
 
 ```
-MENDIX_APP_URL=https://jouw-mendix-omgeving.mendixcloud.com
-MENDIX_ADMIN_USER=jouw-testaccount
+MENDIX_APP_URL=http://localhost:8080
+MENDIX_ADMIN_USER=jouw-gebruikersnaam
 MENDIX_ADMIN_PASS=jouw-wachtwoord
 ```
 
-**`.env.example`** (template, wel in git):
-
-```
-MENDIX_APP_URL=
-MENDIX_ADMIN_USER=
-MENDIX_ADMIN_PASS=
-```
-
-**`.gitignore`** — zorg dat deze regel erin staat:
-
-```
-.env
-```
+Opslaan. `.env` staat al in `.gitignore`, dus het wordt nooit online gezet.
 
 ---
 
-## 5. Claude Code verbinden met de Playwright MCP server
+## 5. Herstart VS Code zodat Claude Code de MCP server ziet
 
-Maak (of vul aan) een `.mcp.json` in de root van het project:
+Sluit VS Code volledig (Cmd+Q / Ctrl+Q) en open het project opnieuw.
 
-```json
-{
-  "mcpServers": {
-    "playwright": {
-      "command": "npx",
-      "args": ["@playwright/mcp@latest"]
-    }
-  }
-}
-```
+**Hoe je weet dat het werkt:** 
+In een chat met Claude Code kun je nu zeggen:
+> "Open http://localhost:8080 en maak een screenshot."
 
-Herstart Claude Code (of herlaad het venster) zodat de MCP-server actief wordt.
-Je herkent dat het werkt doordat Claude Code nu browser-tools tot zijn
-beschikking heeft (navigeren, klikken, typen, snapshot maken van de pagina).
-
-**Testen:** typ in een gewone chat tegen Claude Code iets als:
-
-> "Open https://playwright.dev en zoek de 'Get started' knop, klik erop."
-
-Als de browser daadwerkelijk opent en de actie uitvoert, is de koppeling goed.
+De browser opent daadwerkelijk en je krijgt een screenshot terug.
 
 ---
 
-## 6. Het scenario uitproberen
+## 6. Probeer het agent-scenario
 
-Doel-zin (typ dit letterlijk in de chat tegen Claude Code):
+Dit is wat je live in de presentatie gaat doen. Oefen het een paar keer:
 
-> "Log in op de Mendix-app als admin met de gegevens uit .env, navigeer naar de
-> rapportenpagina, en verifieer dat de data-tabel gevuld is."
+**Typ in de chat tegen Claude Code:**
 
-**Tips:**
+> "Log in op de Mendix-app als admin met de gegevens uit .env, navigeer naar de rapportenpagina, en verifieer dat de data geladen is."
 
-1. Oefen het scenario een paar keer — de eerste poging loopt vaak ergens vast
-   op een afwijkend label of veldnaam.
-2. Als de agent om inloggegevens vraagt: verwijs naar de env-variabelen in
-   plaats van ze letterlijk in de chat te typen.
-3. Let op welke stappen de agent zelfstandig neemt zonder dat jij die had
-   voorgeschreven — dat is precies het verschil met een traditionele test.
+**Wat je ziet:**
+- Claude Code opent de browser
+- Voert login-stappen uit (zonder dat je die hardcoded hebt)
+- Adapteert zich aan het echte UI (velden heten misschien anders dan verwacht)
+- Verifieerd het resultaat
+
+**Opmerkingen:**
+- Eerste keer kan wat stroef gaan (layout aanpassingen, stappen herproeven) — dat's normaal
+- Dit laat precies het verschil zien: je beschrijft het *doel*, Claude Code doet de *stappen*
 
 ---
 
-## 7. Plan B: een vaste Playwright test als vangnet
+## 7. Plan B: vaste test (als de agent-demo faalt)
 
-Schrijf **daarnaast** een gewone test die hetzelfde scenario hardcoded aftest,
-zodat je iets hebt om te tonen als de live agent-demo op het moment zelf faalt
-(netwerk, demo-goden, etc.):
-
-```ts
-// tests/dashboard.spec.ts
-import { test, expect } from "@playwright/test";
-
-test("admin ziet rapportendata na login", async ({ page }) => {
-  await page.goto(process.env.MENDIX_APP_URL!);
-  await page.getByLabel("Gebruikersnaam").fill(process.env.MENDIX_ADMIN_USER!);
-  await page.getByLabel("Wachtwoord").fill(process.env.MENDIX_ADMIN_PASS!);
-  await page.getByRole("button", { name: "Inloggen" }).click();
-
-  await page.getByRole("link", { name: "Rapporten" }).click();
-  await expect(page.getByRole("table")).toBeVisible();
-});
-```
-
-(Pas selectors aan zodra je de echte Mendix-pagina ziet — labels/rollen kunnen
-afwijken.)
-
-Draai 'm met:
+`tests/dashboard.spec.ts` bevat dezelfde flow, maar met hardcoded stappen:
 
 ```bash
-npx playwright test tests/dashboard.spec.ts --headed
+npx playwright test dashboard --headed
 ```
 
-`--headed` toont de browser zichtbaar — fijn als vangnet-demo als de live
-agent-flow niet lukt: "en dit is exact hetzelfde scenario, nu met een vaste
-test — zo zetten we dit in productie/CI."
+`--headed` toont de browser. Pas eerst de selectors aan op jouw Mendix-app:
+
+- Open `tests/dashboard.spec.ts`
+- Kijk naar de `getByLabel`, `getByRole` calls
+- Test-voorbereiding: draai `npx playwright codegen http://localhost:8080` om de echte selectors uit jouw app te vinden
+- Pas de test aan
+
+Zodra dit werkt, heb je een fallback voor dinsdag.
+
+---
 
 ## Troubleshooting
 
-- **MCP server start niet / Claude Code ziet geen browser-tools**: check dat
-  `.mcp.json` in de projectroot staat en herstart het VS Code venster volledig.
-- **Login lukt niet via agent**: geef de agent een preciezere beschrijving van
-  het loginformulier (bijv. "het veld heet 'Gebruikersnaam', niet 'Email'").
-- **Mendix-app reageert traag / timeouts**: verhoog de timeout in
-  `playwright.config.ts` (`use: { actionTimeout: 15000 }`) voor de demo-omgeving.
+| Probleem | Oplossing |
+|---|---|
+| `npm install` faalt | Zorg dat je Node 18+ hebt (`node --version`) |
+| `npx playwright install chromium` stuk | Internet okay? Probeer opnieuw of gebruik `--with-deps` |
+| Claude Code ziet browser-tools niet | Herstart VS Code volledig; check dat `.mcp.json` in de projectroot staat |
+| Login lukt niet via agent | Beschrijf het loginformulier preciezer: "de velden heten 'Inlognaam' en 'Wachtwoord'" |
+| Test times out | Verhoog timeout in `playwright.config.ts`: `use: { actionTimeout: 15000 }` |
+
+---
+
+## Volgende stappen
+
+1. **Oefenen:** draai het agent-scenario minstens 3x
+2. **Plan B testen:** zorg dat `dashboard.spec.ts` werkt
+3. **Timing:** noteer hoe lang elke stap duurt (nuttig voor dinsdag)
