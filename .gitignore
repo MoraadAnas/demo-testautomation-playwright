@@ -12,3 +12,9 @@ node_modules/
 
 # Local Claude Code settings (machine-specific, not part of the template)
 .claude/settings.local.json
+
+# Playwright MCP session output (screenshots etc. from agent runs)
+.playwright-mcp/
+
+# Personal presentation prep, not part of the public template
+PRESENTATIE_OUTLINE.md
