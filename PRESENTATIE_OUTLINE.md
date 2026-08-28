@@ -177,7 +177,9 @@ En hoe kán de agent dat eigenlijk? Via iets dat MCP heet — Model Context Prot
 - ✅ Mendix-app draait lokaal (`http://localhost:8080`)
 - ✅ Playwright + MCP server: klaar
 - ✅ Claude Code: connected
-- **Scenario:** "Log in als admin, navigeer naar rapportenpagina, verifieer data"
+- **Scenario:** [NOG TE BEPALEN — laat de Planner de app verkennen en kies een
+  echt bestaande flow; "rapportenpagina" was een verzonnen placeholder, geen
+  bevestigde pagina in de app]
 
 **Visuals:**
 - Screenshot van VS Code + browser (side-by-side mockup)
@@ -195,7 +197,8 @@ En hoe kán de agent dat eigenlijk? Via iets dat MCP heet — Model Context Prot
 
 **Live opzet:**
 1. Open VS Code / Claude Code chat
-2. Type: "Log in op de Mendix-app als admin met gegevens uit .env, navigeer naar rapportenpagina, verifieer data-tabel"
+2. Type: [NOG TE BEPALEN — exacte scenario volgt zodra de Planner de echte app
+   heeft verkend, zie PROJECT_STATUS.md]
 3. Agent voert uit in echte browser
 4. Toon screenshots/stappen
 

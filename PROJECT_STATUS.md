@@ -45,7 +45,9 @@
 ### Deze week (vr 21 - ma 24 augustus)
 
 - [ ] **Planner live testen** tegen Mendix-app op localhost:8080
-  - Input: "Log in als admin → rapportenpagina → verifieer data"
+  - Input: log in als reguliere gebruiker (`MENDIX_APP_USER`), laat de app
+    verkennen — géén vooraf verzonnen pagina-naam ("rapportenpagina" was een
+    placeholder die nooit tegen de echte app is geverifieerd, verwijderd)
   - Controleren: timing, output-kwaliteit, determinisme
   - Opgeslagen plan moet in `specs/` verschijnen
 
