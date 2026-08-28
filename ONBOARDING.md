@@ -109,11 +109,11 @@ De browser opent daadwerkelijk en je krijgt een screenshot terug.
 
 ## 6. Probeer het agent-scenario
 
-Dit is wat je live in de presentatie gaat doen. Oefen het een paar keer:
+**Typ in de chat tegen Claude Code** — pas de pagina-naam aan op iets dat écht
+in jouw app bestaat, dit is maar een voorbeeld-structuur:
 
-**Typ in de chat tegen Claude Code:**
-
-> "Log in op de Mendix-app als admin met de gegevens uit .env, navigeer naar de rapportenpagina, en verifieer dat de data geladen is."
+> "Log in op de Mendix-app als admin met de gegevens uit .env, navigeer naar
+> [een pagina in jouw app], en verifieer dat de data geladen is."
 
 **Wat je ziet:**
 - Claude Code opent de browser
