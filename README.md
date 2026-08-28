@@ -70,6 +70,18 @@ tests/
   dashboard.spec.ts    # plan-B test: login + verificatie, vaste stappen
 ```
 
+## Verder experimenteren
+
+Playwright heeft ook eigen ingebouwde agents (Planner, Generator, Healer) die
+een testplan verkennen, er code uit genereren, en falende tests repareren:
+
+```bash
+npx playwright init-agents --loop=claude
+```
+
+Zie [`ONBOARDING.md`](ONBOARDING.md#verder-experimenteren-playwrights-eigen-agents)
+voor meer uitleg, of de [officiële Playwright docs](https://playwright.dev/docs/test-agents).
+
 ## Meer weten
 
 Zie [`ONBOARDING.md`](ONBOARDING.md) voor een uitgebreidere toelichting op wat

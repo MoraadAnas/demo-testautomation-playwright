@@ -144,8 +144,17 @@ Zodra dit werkt, heb je een fallback voor dinsdag.
 
 ---
 
-## Volgende stappen
+## Verder experimenteren: Playwright's eigen agents
 
-1. **Oefenen:** draai het agent-scenario minstens 3x
-2. **Plan B testen:** zorg dat `dashboard.spec.ts` werkt
-3. **Timing:** noteer hoe lang elke stap duurt (nuttig voor dinsdag)
+Playwright heeft naast de aanpak hierboven ook een eigen ingebouwde set agents
+(Planner, Generator, Healer) die een testplan verkennen, er testcode uit
+genereren, en falende tests automatisch repareren. Los proberen kan met:
+
+```bash
+npx playwright init-agents --loop=claude
+```
+
+Dit voegt agent-definities toe (`.claude/agents/`) en mappen voor testplannen
+(`specs/`) en gegenereerde tests. Zie de
+[officiële Playwright docs](https://playwright.dev/docs/test-agents) voor hoe
+je Planner, Generator en Healer aanstuurt.
