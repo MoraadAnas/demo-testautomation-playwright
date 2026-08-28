@@ -15,7 +15,8 @@ test('admin ziet data na login', async ({ page }) => {
   await page.getByLabel(/wachtwoord|password/i).fill(process.env.MENDIX_ADMIN_PASS!);
   await page.getByRole('button', { name: /inloggen|log in|sign in/i }).click();
 
-  // TODO: vervang door de link/knop naar jouw dashboard of rapportenpagina
+  // TODO: vervang door de link/knop naar een echte pagina in jouw app
+  // (onderstaande namen zijn maar voorbeelden, geen aanname over jouw app)
   await page.getByRole('link', { name: /rapporten|reports|dashboard/i }).click();
 
   // TODO: vervang door een assert die past bij jouw pagina (tabel, kaart, lijst...)

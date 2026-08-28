@@ -44,9 +44,10 @@ Clone deze repo, vul je eigen Mendix-gegevens in, en probeer het zelf uit.
    tot zijn beschikking heeft (navigeren, klikken, snapshotten).
 
 5. **Probeer het agent-scenario live.** Typ in de chat tegen Claude Code
-   bijvoorbeeld:
+   bijvoorbeeld (pas de pagina-naam aan op iets dat écht in jouw app bestaat —
+   dit is maar een voorbeeld):
    > "Log in op de Mendix-app als admin met de gegevens uit .env, navigeer naar
-   > de rapportenpagina, en verifieer dat de data geladen is."
+   > [een pagina in jouw app], en verifieer dat de data geladen is."
 
    De agent voert dit zelfstandig uit in een echte browser — jij beschrijft
    het doel, niet de stappen.
