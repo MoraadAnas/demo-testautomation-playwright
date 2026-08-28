@@ -17,7 +17,6 @@
   },
   "homepage": "https://github.com/MoraadAnas/demo-testautomation-playwright#readme",
   "devDependencies": {
-    "@playwright/mcp": "^0.0.79",
     "@playwright/test": "^1.62.1",
     "@types/node": "^26.2.0",
     "dotenv": "^17.4.2"
