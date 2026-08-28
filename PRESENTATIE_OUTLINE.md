@@ -26,6 +26,11 @@ technische stap, alleen wat je op een slide of in de live demo kan tonen.
 - **Voor deelnemers:** dit is nu ook als losse optie vermeld in README.md en
   ONBOARDING.md op `main` (`npx playwright init-agents --loop=claude`), zodat
   ze het na de demo zelf kunnen uitproberen
+- **Technisch detail (mogelijk voor Q&A):** Agents zijn **subagents**, niet
+  skills. Ze hebben een eigen, geïsoleerde conversatie-context en beperkte
+  toolset (alleen wat ze nodig hebben). De Planner kan bijvoorbeeld niet
+  zomaar bestanden schrijven — alleen plannen opslaan via `planner_save_plan`.
+  Dit is veiliger en schoner dan loosely gekoppelde tools.
 - **Nog te doen:** Planner/Generator live testen tegen de Mendix-app,
   screenshot/voorbeeld toevoegen
 
