@@ -13,9 +13,23 @@ zodat je zelf ervaart hoe AI-gestuurde testautomatisering werkt.
 ## 0. Wat is wat (kort)
 
 - **Playwright** — automation framework dat de browser bestuurt (klikken, typen, wachten).
-- **Playwright MCP server** (`@playwright/mcp`) — maakt Playwright-tools beschikbaar voor een AI-agent.
-- **Claude Code** — AI-agent die, eenmaal gekoppeld via MCP, browseracties uitvoert op basis van jouw instructies in natuurlijke taal — geen hardcoded stappen.
+- **MCP (Model Context Protocol)** — het protocol waarmee een AI-agent daadwerkelijk
+  toegang krijgt tot externe tools, in dit geval een echte browser. Zonder MCP kan
+  een AI alleen tekst genereren; met MCP kan het een pagina openen, een snapshot
+  lezen, klikken, typen — en dus **verifiëren** in plaats van gokken.
+- **Playwright MCP server** (`@playwright/mcp`) — de concrete MCP-server die
+  Playwright's browser-tools (navigeren, klikken, typen, snapshotten) beschikbaar
+  maakt voor een AI-agent zoals Claude Code.
+- **Claude Code** — AI-agent die, eenmaal gekoppeld via MCP, browseracties uitvoert
+  op basis van jouw instructies in natuurlijke taal — geen hardcoded stappen.
 - **Plan B: vaste test** (`tests/dashboard.spec.ts`) — fallback voor als de live agent-demo stroeft.
+
+> **Waarom MCP het verschil maakt:** zonder een verbinding naar een echte browser
+> zou de agent alleen tekst typen die *op* Playwright-code lijkt, zonder ooit te
+> checken of een knop, veld of label daadwerkelijk bestaat op jouw pagina — puur
+> giswerk. Met MCP ziet de agent de echte pagina en verifieert elke stap live,
+> vóórdat hij 'm vastlegt in een test. Dat is het verschil tussen giswerk en een
+> betrouwbare test.
 
 ---
 
