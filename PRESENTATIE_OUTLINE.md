@@ -134,16 +134,32 @@ Precies dat gaan we vandaag anders doen. Aan het eind van deze sessie schrijf ik
 - Agent: Begrijpt wat je wilt → figureert de stappen uit
 - → Geen hardcoding, agent adapteert aan UI-veranderingen
 
+**Hoe kan de agent dat — MCP (kort, 1 bullet-blok):**
+- De agent "raadt" niet — hij **ziet de echte pagina live**, via de
+  **Playwright MCP server** (Model Context Protocol)
+- MCP is de verbinding die de AI daadwerkelijk toegang geeft tot een browser:
+  navigeren, klikken, typen, een snapshot van de pagina lezen
+- **Zonder die verbinding** zou de agent alleen tekst typen die *op* Playwright-
+  code lijkt, zonder ooit te checken of een knop, veld of label echt bestaat —
+  puur gokwerk
+- **Met** die verbinding verifieert de agent elke stap tegen de echte app
+  vóórdat hij 'm vastlegt — dat is het verschil tussen giswerk en een
+  betrouwbare test
+
 **Visuals:**
 - Twee pijlen: één "prescriptief" (stap-voor-stap), één "intentie-based"
 - Brein-icoon voor de agent
+- Simpel diagram: Agent ←→ MCP server ←→ Browser (laat zien dat MCP de
+  brug is, niet de agent zelf die "magisch" de browser bestuurt)
 
 **Speaker notes:**
 "Dit is de grote verandering. Traditioneel zeg je Playwright stap voor stap wat te doen — 'klik hier, vul dit in, wacht op dat element'. 
 
 Met agents werk je anders: jij zegt WAAR je heen wilt ('log in en ga naar het dashboard'), en de agent figureert zelfstandig de stappen uit. 
 
-Waarom is dat handig? UI verandert — agent past zich aan. Je hoeft je test niet herschrijven."
+Waarom is dat handig? UI verandert — agent past zich aan. Je hoeft je test niet herschrijven.
+
+En hoe kán de agent dat eigenlijk? Via iets dat MCP heet — Model Context Protocol. Dat is de verbinding die de AI daadwerkelijk laat kijken naar en klikken in een echte browser. Zonder die verbinding zou de agent alleen tekst typen die op een test lijkt, zonder ooit te checken of dat veld of die knop echt bestaat. Met MCP verifieert hij elke stap live, tegen de echte app — dat is het verschil tussen giswerk en een betrouwbare test."
 
 **Timing:** ~2.5 min
 
