@@ -8,7 +8,26 @@
 Wordt bijgewerkt zodra we iets bouwen dat presentatie-waardig is. Niet elke
 technische stap, alleen wat je op een slide of in de live demo kan tonen.
 
-*(nog leeg — komt zodra we de Playwright agents opzetten)*
+### Playwright's officiële agents opgezet (vr 21 aug)
+
+- `npx playwright init-agents --loop=claude` gedraaid
+- Drie agents nu beschikbaar: **Planner**, **Generator**, **Healer**
+- Relevant voor slide 5 (agents-uitleg) en slide 7 (live demo):
+  - **Planner**: verkent je Mendix-app live, schrijft een leesbaar testplan
+    (Markdown) in `specs/`
+  - **Generator**: leest dat plan, voert de stappen *echt* uit in de browser
+    terwijl hij typeert, en schrijft daarna de uiteindelijke `tests/*.spec.ts`
+  - **Healer**: als een test later faalt (UI veranderd), analyseert en
+    repareert 'm automatisch
+- **Demo-idee voor slide 7:** in plaats van los prompten, laat zien hoe de
+  Planner een testplan schrijft ("kijk, dit heeft de agent zelf bedacht na
+  het verkennen van de app"), en de Generator dat omzet naar echte code —
+  dat is visueel sterker dan alleen "test slaagt"
+- **Voor deelnemers:** dit is nu ook als losse optie vermeld in README.md en
+  ONBOARDING.md op `main` (`npx playwright init-agents --loop=claude`), zodat
+  ze het na de demo zelf kunnen uitproberen
+- **Nog te doen:** Planner/Generator live testen tegen de Mendix-app,
+  screenshot/voorbeeld toevoegen
 
 ---
 
